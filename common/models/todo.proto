@@ -1,0 +1,98 @@
+syntax = "proto3";
+
+package model;
+
+option go_package = "/common/models";
+
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+
+message ToDo {
+  string ID = 1;
+  string Name = 2;
+}
+
+message GetPostRequest {
+  string ID = 1;
+}
+
+message GetResponse {
+  ToDo todo = 1;
+}
+
+message CreatePostRequest {
+  ToDo todo = 1;
+}
+
+message CreateResponse {
+  ToDo todo = 1;
+}
+
+message UpdatePostRequest {
+  string ID = 1;
+  string Name = 2;
+}
+
+message UpdateResponse {
+  ToDo todo = 1;
+}
+
+message DeletePostRequest {
+  string ID = 1;
+}
+
+message DeleteResponse {
+  ToDo todo = 1;
+}
+
+message ReadAllRequest {
+ repeated ToDo todo = 1;
+}
+
+message ReadAllResponse {
+  repeated ToDo todo = 1;
+}
+
+message MutationResponse {
+  string success = 1;
+}
+
+// Service to manage list of todo tasks
+service ToDoService {
+    // Create new todo task
+    rpc Create(ToDo) returns (MutationResponse) {
+          option (google.api.http) = {
+        post : "/todos",
+        body : "*",
+      };
+    }
+
+    // Read todo task
+    rpc Read(GetPostRequest) returns (GetResponse) {
+      option (google.api.http) = {
+        get : "/todos/{ID}",
+      };
+    }
+
+    // Update todo task
+    rpc Update(UpdatePostRequest) returns (MutationResponse) {
+      option (google.api.http) = {
+        put : "/todos/{ID}",
+        body : "*",
+      };
+    }
+
+    // Delete todo task
+    rpc Delete(DeletePostRequest) returns (MutationResponse) {
+      option (google.api.http) = {
+        delete : "/todos/{ID}",
+      };
+    }
+
+    // Read all todo tasks
+    rpc ReadAll(google.protobuf.Empty) returns (ReadAllResponse) {
+      option (google.api.http) = {
+        get : "/todos",
+      };
+    }
+}
